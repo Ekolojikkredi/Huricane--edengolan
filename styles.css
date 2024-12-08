@@ -13,16 +13,6 @@ header {
     padding: 20px 0;
 }
 
-header .logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-header .logo h1 {
-    margin-left: 10px;
-}
-
 .container {
     display: flex;
     justify-content: space-between;
