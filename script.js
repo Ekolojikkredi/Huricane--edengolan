@@ -1,47 +1,19 @@
-// Sayfa İçeriği Değiştir
+// Sayfa geçişleri için fonksiyon
 function showPage(page) {
-    let content = "";
+    var content = '';
+
     switch (page) {
-        case 'ekolojik-kredi':
-            content = `
-                <h2>Ekolojik Kredi Nedir?</h2>
-                <p>Ekolojik kredi, çevreye duyarlı davranışlar sergileyen bireylerin, toplulukların ya da okulların çevreye verdiği zararı azaltmak adına aldıkları puanları temsil eder. Bu sistem, geri dönüşüm, atık yönetimi, enerji tasarrufu ve sürdürülebilir uygulamaları teşvik ederek çevre bilincini artırmayı amaçlar. 
-                Ekolojik kredi, hem bireysel hem de toplumsal düzeyde çevre dostu uygulamaların teşvik edilmesi ve yaygınlaştırılması için önemlidir. Her birey ya da okul, yaptıkları çevre dostu davranışlarla ekolojik kredi kazanır ve bu krediler belirli ödüllerle değiştirilebilir.</p>
-            `;
-            break;
-        case 'geri-donusum':
-            content = `
-                <h2>Geri Dönüşüm Nedir?</h2>
-                <p>Geri dönüşüm, atık malzemelerin yeniden işlenerek, aynı ya da benzer türde yeni ürünlere dönüştürülmesidir. Bu süreç, doğal kaynakların korunmasına, çevre kirliliğinin azaltılmasına ve enerji tasarrufuna yardımcı olur. Örneğin, kağıt, plastik, cam ve metal gibi malzemeler geri dönüştürülerek yeniden kullanılabilir. 
-                Geri dönüşüm, doğanın dengesini koruma noktasında önemli bir adımdır. Çevreye zararlı atıkların yeniden değerlendirilmesi, insanların atık üretme alışkanlıklarını değiştirmelerine ve doğayı koruma bilincini geliştirmelerine katkı sağlar. Her bir birey, evlerinde geri dönüşüm uygulamaları yaparak bu süreçte aktif bir rol oynayabilir. </p>
-            `;
-            break;
-        case 'hazirlayanlar':
-            content = `
-                <h2>Hazırlayanlar</h2>
-                <p>Danışman Öğretmen: Osman Onuk</p>
-                <p>Öğrenciler: Muhammedcan Arslanparçası, Bilal Yiğit Tezcan, Yağız Efe Yılmaz</p>
-            `;
-            break;
-        case 'bize-ulasin':
-            content = `
-                <h2>Bize Ulaşın</h2>
-                <p>Email: <a href="mailto:ekolojikkreditubitak@gmail.com">ekolojikkreditubitak@gmail.com</a></p>
-                <p>Adres: Torbalı Anadolu Lisesi, İzmir, Torbalı</p>
-                <p>YouTube Kanalı: <a href="https://youtube.com/@ekolojikkredi?si=esEweBsfz6l6LGVU" target="_blank">Ekolojik Kredi YouTube Kanalı</a></p>
-            `;
-            break;
         case 'kayit':
             content = `
                 <h2>Okul Kayıt Formu</h2>
-                <form id="okul-form" onsubmit="return okulKaydiYap()">
+                <form id="okul-kayit-form" onsubmit="return okulKaydiYap()">
                     <label for="okul-isimi">Okul Adı:</label>
                     <input type="text" id="okul-isimi" required><br>
                     <label for="okul-il">İl:</label>
                     <input type="text" id="okul-il" required><br>
                     <label for="okul-ilce">İlçe:</label>
                     <input type="text" id="okul-ilce" required><br>
-                    <label for="okul-sifre">Şifre:</label>
+                    <label for="okul-sifre">Okul Şifresi:</label>
                     <input type="password" id="okul-sifre" required><br>
                     <button type="submit">Okul Kaydını Tamamla</button>
                 </form>
@@ -50,10 +22,10 @@ function showPage(page) {
         case 'ogrenci-kaydi':
             content = `
                 <h2>Öğrenci Kayıt Formu</h2>
-                <form id="ogrenci-form" onsubmit="return ogrenciKaydiYap()">
-                    <label for="ogrenci-ad">Öğrenci Adı:</label>
+                <form id="ogrenci-kayit-form" onsubmit="return ogrenciKaydiYap()">
+                    <label for="ogrenci-ad">Adı:</label>
                     <input type="text" id="ogrenci-ad" required><br>
-                    <label for="ogrenci-soyad">Öğrenci Soyadı:</label>
+                    <label for="ogrenci-soyad">Soyadı:</label>
                     <input type="text" id="ogrenci-soyad" required><br>
                     <label for="ogrenci-numara">Öğrenci Numarası:</label>
                     <input type="text" id="ogrenci-numara" required><br>
@@ -148,31 +120,140 @@ function ogrenciKaydiYap() {
     localStorage.setItem("ogrenciIl", ogrenciIl);
     localStorage.setItem("ogrenciIlce", ogrenciIlce);
 
-    alert("Öğrenci kaydı başarıyla tamamlandı!");
-    showPage('kayit'); // Kayıt işlemi tamamlandığında tekrar kayit sayfasına dön
+    alert("Öğrenci kaydınız başarıyla tamamlandı.");
+    showPage('kayit'); // Kaydı tamamladıktan sonra ana sayfaya dön
+
     return false;
 }
 
-// Veri görüntüleme işlemi
-document.getElementById("veri-goruntuleme-form").onsubmit = function (event) {
-    event.preventDefault();
+// Veri Görüntüleme işlemi
+document.getElementById("veri-goruntuleme-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
     var email = document.getElementById("email").value;
     var ogrenciNumara = document.getElementById("ogrenci-numara").value;
 
-    // Öğrenci bilgilerini kontrol etme (localStorage'dan)
-    var storedEmail = localStorage.getItem("ogrenciEmail");
-    var storedNumara = localStorage.getItem("ogrenciNumara");
+    var ogrenciAd = localStorage.getItem("ogrenciAd");
+    var ogrenciSoyad = localStorage.getItem("ogrenciSoyad");
+    var ogrenciNumaraLocal = localStorage.getItem("ogrenciNumara");
+    var ogrenciEmail = localStorage.getItem("ogrenciEmail");
 
-    if (email === storedEmail && ogrenciNumara === storedNumara) {
+    if (ogrenciNumara === ogrenciNumaraLocal && email === ogrenciEmail) {
         document.getElementById("veri-goruntuleme-sonuc").innerHTML = `
-            <h3>Öğrenci Bilgileri</h3>
-            <p>Adı: ${localStorage.getItem("ogrenciAd")}</p>
-            <p>Soyadı: ${localStorage.getItem("ogrenciSoyad")}</p>
-            <p>Öğrenci Numarası: ${localStorage.getItem("ogrenciNumara")}</p>
-            <p>Okul: ${localStorage.getItem("ogrenciOkul")}</p>
-            <p>Sınıf: ${localStorage.getItem("ogrenciSinif")}</p>
+            <h3>Öğrenci Bilgileri:</h3>
+            <p>Adı: ${ogrenciAd}</p>
+            <p>Soyadı: ${ogrenciSoyad}</p>
+            <p>Öğrenci Numarası: ${ogrenciNumaraLocal}</p>
+            <p>E-posta: ${ogrenciEmail}</p>
         `;
     } else {
-        document.getElementById("veri-goruntuleme-sonuc").innerHTML = "<p>Bilgiler eşleşmedi. Lütfen tekrar deneyin.</p>";
+        document.getElementById("veri-goruntuleme-sonuc").innerHTML = "<p>Bu bilgilere erişim izniniz yok.</p>";
     }
-};
+});
+
+// Geri Dönüşüm Nedir ve Ekolojik Kredi Nedir açıklamaları
+function ekolojikKrediNedir() {
+    return `
+        <h2>Ekolojik Kredi Nedir?</h2>
+        <p>Ekolojik kredi, bireylerin veya okulların çevresel sürdürülebilirlik adına yaptığı geri dönüşüm ve doğa dostu faaliyetler için ödüllendirildiği bir sistemdir.
+        Bu sistemde, geri dönüştürülebilir atıklar toplanarak puanlara dönüştürülür ve bu puanlar çevreye olan katkıya göre değerlendirilir. Bu şekilde çevre bilincini artırmayı ve sürdürülebilir yaşamı teşvik etmeyi amaçlar.</p>
+    `;
+}
+
+function geriDonusumNedir() {
+    return `
+        <h2>Geri Dönüşüm Nedir?</h2>
+        <p>Geri dönüşüm, kullanılmaz hale gelmiş ürünlerin yeniden kullanılabilir hale getirilmesi sürecidir. 
+        Bu süreç, atıkların toplanarak işlenmesi ve yeniden üretim için malzeme haline getirilmesiyle gerçekleşir.
+        Geri dönüşüm, doğal kaynakların korunmasına yardımcı olur, enerji tasarrufu sağlar ve çevreyi kirleten atıkların miktarını azaltır.</p>
+    `;
+}
+
+// Hazırlayanlar ve iletişim bilgileri
+function hazirlayanlar() {
+    return `
+        <h2>Hazırlayanlar</h2>
+        <p>Danışman Öğretmen: Osman Onuk</p>
+        <p>Öğrenciler:</p>
+        <ul>
+            <li>Muhammedcan Arslanparçası</li>
+            <li>Bilal Yiğit Tezcan</li>
+            <li>Yağız Efe Yılmaz</li>
+        </ul>
+    `;
+}
+
+function bizeUlasin() {
+    return `
+        <h2>Bize Ulaşın</h2>
+        <p>Email: <a href="mailto:ekolojikkreditubitak@gmail.com">ekolojikkreditubitak@gmail.com</a></p>
+        <p>Okul Adresi: Torbalı Anadolu Lisesi, İzmir, Torbalı</p>
+        <p>YouTube Kanalı: <a href="https://youtube.com/@ekolojikkredi?si=esEweBsfz6l6LGVU" target="_blank">Ekolojik Kredi YouTube Kanalı</a></p>
+    `;
+}
+
+// Sayfa Geçişi Yapma Fonksiyonu
+function showPage(page) {
+    var content = '';
+    
+    switch (page) {
+        case 'ekolojik-kredi':
+            content = ekolojikKrediNedir();
+            break;
+        case 'geri-donusum':
+            content = geriDonusumNedir();
+            break;
+        case 'hazirlayanlar':
+            content = hazirlayanlar();
+            break;
+        case 'bize-ulasin':
+            content = bizeUlasin();
+            break;
+        case 'kayit':
+            content = `
+                <h2>Okul Kayıt Formu</h2>
+                <form id="okul-kayit-form" onsubmit="return okulKaydiYap()">
+                    <label for="okul-isimi">Okul Adı:</label>
+                    <input type="text" id="okul-isimi" required><br>
+                    <label for="okul-il">İl:</label>
+                    <input type="text" id="okul-il" required><br>
+                    <label for="okul-ilce">İlçe:</label>
+                    <input type="text" id="okul-ilce" required><br>
+                    <label for="okul-sifre">Okul Şifresi:</label>
+                    <input type="password" id="okul-sifre" required><br>
+                    <button type="submit">Okul Kaydını Tamamla</button>
+                </form>
+            `;
+            break;
+        case 'ogrenci-kaydi':
+            content = `
+                <h2>Öğrenci Kayıt Formu</h2>
+                <form id="ogrenci-kayit-form" onsubmit="return ogrenciKaydiYap()">
+                    <label for="ogrenci-ad">Adı:</label>
+                    <input type="text" id="ogrenci-ad" required><br>
+                    <label for="ogrenci-soyad">Soyadı:</label>
+                    <input type="text" id="ogrenci-soyad" required><br>
+                    <label for="ogrenci-numara">Öğrenci Numarası:</label>
+                    <input type="text" id="ogrenci-numara" required><br>
+                    <label for="ogrenci-email">E-posta:</label>
+                    <input type="email" id="ogrenci-email" required><br>
+                    <label for="ogrenci-telefon">Telefon:</label>
+                    <input type="tel" id="ogrenci-telefon" required><br>
+                    <label for="ogrenci-okul">Okul Adı:</label>
+                    <input type="text" id="ogrenci-okul" required><br>
+                    <label for="ogrenci-sinif">Sınıf:</label>
+                    <input type="text" id="ogrenci-sinif" required><br>
+                    <label for="ogrenci-il">İl:</label>
+                    <input type="text" id="ogrenci-il" required><br>
+                    <label for="ogrenci-ilce">İlçe:</label>
+                    <input type="text" id="ogrenci-ilce" required><br>
+                    <button type="submit">Öğrenci Kaydını Tamamla</button>
+                </form>
+            `;
+            break;
+        default:
+            content = "<h2>Sayfa Bulunamadı</h2><p>Seçilen sayfa bulunamadı.</p>";
+            break;
+    }
+    document.getElementById("page-content").innerHTML = content;
+}
